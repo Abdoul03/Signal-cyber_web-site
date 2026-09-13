@@ -13,7 +13,6 @@ import {
   Users,
   X,
 } from "lucide-react";
-import logoAsset from "@/assets/signal-cyber-icon-rounded.png.asset.json";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/signal-cyber-icon-rounded.png";
