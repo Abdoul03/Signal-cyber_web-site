@@ -13,9 +13,9 @@ import {
   Users,
   X,
 } from "lucide-react";
+import logo from "@/assets/signal-cyber-icon-rounded.png";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/signal-cyber-icon-rounded.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
