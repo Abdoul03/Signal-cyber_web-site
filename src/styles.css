@@ -105,10 +105,10 @@
   --border: oklch(0.92 0.015 257);
   --input: oklch(0.92 0.015 257);
   --ring: oklch(0.62 0.09 258);
-  --chart-1: oklch(0.38 0.095 260);
+  --chart-1: oklch(0.68 0.2 45);
   --chart-2: oklch(0.72 0.19 155);
   --chart-3: oklch(0.55 0.1 258);
-  --chart-4: oklch(0.85 0.12 150);
+  --chart-4: oklch(0.82 0.17 90);
   --chart-5: oklch(0.72 0.17 65);
   --sidebar: oklch(0.985 0.003 250);
   --sidebar-foreground: oklch(0.27 0.075 262);
@@ -140,10 +140,10 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-1: oklch(0.75 0.18 45);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-4: oklch(0.88 0.17 90);
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.208 0.042 265.755);
   --sidebar-foreground: oklch(0.984 0.003 247.858);
@@ -173,18 +173,85 @@
   background: color-mix(in oklab, var(--surface) 76%, transparent);
   backdrop-filter: blur(16px) saturate(1.1);
   border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 70%), 0 8px 32px -12px oklch(0.35 0.07 260 / 18%);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 70%),
+    0 8px 32px -12px oklch(0.35 0.07 260 / 18%);
 }
 
 @utility glass-edge {
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 85%), inset 0 0 0 1px oklch(1 0 0 / 15%), 0 4px 20px -8px oklch(0.35 0.07 260 / 15%);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 85%),
+    inset 0 0 0 1px oklch(1 0 0 / 15%),
+    0 4px 20px -8px oklch(0.35 0.07 260 / 15%);
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-stack-card {
+  cursor: pointer;
+  transform: translate(var(--card-x), var(--card-y)) rotate(var(--card-rotation))
+    scale(var(--card-scale));
+  transition:
+    transform 420ms cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow 420ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+
+.card-stack-card:hover {
+  transform: translate(var(--card-x), calc(var(--card-y) - 8px)) rotate(var(--card-rotation))
+    scale(calc(var(--card-scale) + 0.02));
+  box-shadow: 0 18px 34px -12px oklch(0.25 0.06 260 / 32%);
+}
+
+.card-stack-card--intro {
+  animation: card-stack-intro 900ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes card-stack-intro {
+  0%,
+  100% {
+    transform: translate(var(--card-x), var(--card-y)) rotate(var(--card-rotation))
+      scale(var(--card-scale));
+  }
+  50% {
+    transform: translate(var(--card-x), calc(var(--card-y) - 7px)) rotate(var(--card-rotation))
+      scale(var(--card-scale));
+  }
+}
+
+@media (max-width: 639px) {
+  .card-stack-card {
+    transform: translate(var(--card-x), var(--card-y)) rotate(var(--card-mobile-rotation))
+      scale(var(--card-scale));
+  }
+
+  .card-stack-card:hover {
+    transform: translate(var(--card-x), calc(var(--card-y) - 8px))
+      rotate(var(--card-mobile-rotation)) scale(calc(var(--card-scale) + 0.02));
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .animate-rise { animation: rise 0.7s cubic-bezier(0.32, 0.72, 0, 1) both; }
+  .animate-rise {
+    animation: rise 0.7s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-stack-card {
+    transition: none;
+  }
+
+  .card-stack-card--intro {
+    animation: none;
+  }
 }

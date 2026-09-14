@@ -2,10 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
   BookOpen,
-  Eye,
   FileCheck2,
-  Flag,
-  HeartHandshake,
   LockKeyhole,
   Menu,
   ShieldCheck,
@@ -14,7 +11,11 @@ import {
   X,
 } from "lucide-react";
 import logo from "@/assets/signal-cyber-icon-rounded.png";
-import { useState } from "react";
+import image1 from "@/assets/Image1.png";
+import image2 from "@/assets/Image2.png";
+import image3 from "@/assets/Image3.png";
+import image4 from "@/assets/Image4.png";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -41,8 +42,15 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
+  const [introCard, setIntroCard] = useState(0);
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIntroCard(-1), 950);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-frost text-ink antialiased">
@@ -120,52 +128,46 @@ function Index() {
             </div>
           </div>
           <div className="animate-rise lg:col-span-5 lg:[animation-delay:120ms]" id="parcours">
-            <div className="rounded-md p-6 glass glass-edge">
-              <div className="mb-5 flex items-start justify-between">
-                <h2 className="font-display text-xl font-bold">Trois portes d'entrée</h2>
-                <span className="font-mono text-xs text-muted-foreground">01—03</span>
-              </div>
-              <div className="space-y-2">
-                {[
-                  {
-                    n: "01",
-                    title: "Je suis victime",
-                    text: "Être protégé et orienté vers une aide adaptée.",
-                    icon: HeartHandshake,
-                    tone: "text-warning bg-warning/15",
-                  },
-                  {
-                    n: "02",
-                    title: "Je suis témoin",
-                    text: "Déposer une observation sans s'exposer.",
-                    icon: Eye,
-                    tone: "text-brand bg-brand/10",
-                  },
-                  {
-                    n: "03",
-                    title: "Je lance une alerte",
-                    text: "Signaler un risque de manière sécurisée.",
-                    icon: Flag,
-                    tone: "text-ink bg-ink/10",
-                  },
-                ].map(({ n, title, text, icon: Icon, tone }) => (
+            <div className="relative isolate mx-auto h-185 w-full max-w-75 overflow-visible sm:h-200">
+              {[image1, image2, image3, image4].map((image, index) => {
+                const offset = (index - activeImage + 4) % 4;
+                const deckPosition = [
+                  { x: 0, y: 0, rotation: 0, mobileRotation: 0, scale: 1.02 },
+                  { x: -12, y: 24, rotation: -5, mobileRotation: -2, scale: 0.98 },
+                  { x: 14, y: 46, rotation: 4, mobileRotation: 2, scale: 0.95 },
+                  { x: -8, y: 66, rotation: -7, mobileRotation: -3, scale: 0.92 },
+                ][offset] ?? { x: 0, y: 0, rotation: 0, mobileRotation: 0, scale: 1.02 };
+
+                return (
                   <button
-                    key={n}
-                    onClick={() => scrollTo("presentation")}
-                    className="flex w-full items-center gap-3 rounded-sm border border-ink/5 bg-ink/[0.03] p-3 text-left transition-colors hover:bg-ink/[0.06]"
+                    key={image}
+                    type="button"
+                    onClick={() => setActiveImage(index)}
+                    aria-label={`Afficher l'image ${index + 1} au premier plan`}
+                    className={`card-stack-card absolute inset-x-0 top-0 aspect-1206/2622 overflow-hidden rounded-md border border-white/60 bg-surface p-1 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${introCard === index ? "card-stack-card--intro" : ""}`}
+                    style={
+                      {
+                        zIndex: 4 - offset,
+                        "--card-x": `${deckPosition.x}px`,
+                        "--card-y": `${deckPosition.y}px`,
+                        "--card-rotation": `${deckPosition.rotation}deg`,
+                        "--card-mobile-rotation": `${deckPosition.mobileRotation}deg`,
+                        "--card-scale": deckPosition.scale,
+                      } as CSSProperties
+                    }
                   >
-                    <span className={`grid size-10 shrink-0 place-items-center rounded-sm ${tone}`}>
-                      <Icon className="size-4" />
-                    </span>
-                    <span className="flex-1">
-                      <span className="block text-sm font-semibold">{title}</span>
-                      <span className="block text-xs text-muted-foreground">{text}</span>
-                    </span>
-                    <span className="font-mono text-xs text-muted-foreground">{n}</span>
+                    <img
+                      src={image}
+                      alt={`Illustration SIGNAL CYBER ${index + 1}`}
+                      className="size-full rounded-sm object-cover"
+                    />
                   </button>
-                ))}
-              </div>
+                );
+              })}
             </div>
+            <p className="mt-3 text-center font-mono text-xs text-muted-foreground">
+              Explorez les étapes →
+            </p>
           </div>
         </header>
 
